@@ -1,0 +1,35 @@
+trigger:
+  branches:
+    include:
+    - main
+    - develop
+variables:
+- group: Polaris_var
+stages:
+- stage: __default
+  jobs:
+  - job: Job
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: JavaToolInstaller@0
+      displayName: 'Install JDK'
+      inputs:
+        versionSpec: 21
+        jdkArchitectureOption: x64
+        jdkSourceOption: PreInstalled
+    - task: Maven@4
+      displayName: 'Maven Build'
+      inputs:
+        options: '-B -DskipTests'
+    - task: BlackDuckSecurityScan@2
+      displayName: 'Polaris Scan'
+      inputs:
+        polaris_server_url: $(POLARIS_SERVERURL)
+        polaris_access_token: $(POLARIS_ACCESSTOKEN)
+        polaris_assessment_types: 'SAST'
+        polaris_application_name: Mirul_test123
+        polaris_project_name: test_project
+        polaris.onboarding: true
+        include_diagnostics: false
+        mark_build_status: 'SucceededWithIssues'
