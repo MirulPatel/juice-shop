@@ -2,7 +2,6 @@ trigger:
   branches:
     include:
     - main
-    - develop
 variables:
 - group: Polaris_var
 stages:
@@ -21,6 +20,6 @@ stages:
         polaris_application_name: Mirul_test123
         polaris_project_name: test_project
         polaris_test_sast_type: 'SAST-RAPID'
-        polaris.onboarding: true
+        polaris.onboarding: false
         include_diagnostics: false
         mark_build_status: 'SucceededWithIssues'
